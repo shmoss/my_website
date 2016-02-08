@@ -71,7 +71,7 @@ function cities(){
  // Now, we'll declare the addColumns function   
  function addColumns(cityPop){
     	//Let's make sure it works
-        console.log("This is working to");
+        console.log("This is working too");
     //Loop through each table row using .each method	
     $('tr').each(function(i){
 		console.log(cityPop)
@@ -87,21 +87,21 @@ function cities(){
     		if (cityPop[i-1].population < 100000){
     			//classify local variable
     			citySize = 'Small';
-    			console.log(i);
-    			console.log(cityPop[i-1].population);
+    			//console.log(i);
+    			//console.log(cityPop[i-1].population);
 
     		} else if (cityPop[i-1].population < 500000){
     			//"citySize" originally spelled "citysize", needed fix
     			//re-classify variable (local)
     			citySize = 'Medium';
-    			console.log(i);
-    			console.log(cityPop[i-1].population);
+    			//console.log(i);
+    			//console.log(cityPop[i-1].population);
 
     		} else {
     			// re-classify 
     			citySize = 'Large';
-    			console.log(i);
-    			console.log(cityPop[i-1].population);
+    			//console.log(i);
+    			//console.log(cityPop[i-1].population);
     		};
 			//Missing parenthesis around $this, missing < ?
     		$(this).append('<td>' + citySize + '</td>');
@@ -156,18 +156,6 @@ $('table').on('click', function (){
 		// function executes the alert command 
         alert('Hey, you clicked me!');
     });
-//function isn't called, depends merely on click
-
-//this might work too, closer to the original de-bug file approach
-/*function clickme(){
-
-		alert('Hey, you clicked me!');
-		//the command executed within the function
-		$('table').on('click', clickme);
-};
-clickme()
-*/
-
 
 //this is the end of the "clickme!" function
  };
@@ -196,8 +184,58 @@ document.getElementById("list1").innerHTML = "This is Starr's Webpage,"
 
 jQuery('#para1').html("Welcome.")
 var list3 = document.createElement("li")
-para1.appendChild(list3)
+para1.appendChild(list3);
 //goodbye
+console.log("start of ajax")
+
+//We'll call an AJAX function
+function jQueryAjax(){
+    //defining a variable to hold the data
+    var mydata;
+
+    //here is the jQuery ajax method, where we want to pull our data from a file
+    $.ajax("data/MegaCities.GeoJSON", {
+    	// dataType is first parameter: our data type
+        dataType: "json",
+        // success is our second parameter: success starts the callback function
+        success: function(response){
+        	// response is the first and most important parameter of callback function: your data
+            mydata = response;
+
+            //Here, we'll console.log the data - which will appear as an array of objects because it's read within the function
+            //Array appears in the console, but only after the initial console log reads undefined 
+            console.log(mydata);
+       
+        }
+    });
+
+    //will read "undefined" in console message- the variable written outside the function. 
+    // This will be executed before callback function, so will appear empty!
+    console.log(mydata);
+};
+//Let's call the function
+jQueryAjax()
+console.log("end of script")
 
 
+//This is the debugAjax function
+function debugAjax(){
+	//This is the ajax query method.  We request the GeoJSON MegaCities file
+	$.ajax("data/MegaCities.GeoJSON", {
+		//first parameter dataType is set to JSON (file-type of MegaCites)
+		dataType: "json",
+		//success is the second parameter: this initiates the callback function
+		success: function(response){
+						
+			//we nest the command within the callback function
+			//the command tells us to append the GeoJSON file to the div, with line breaks
+			$("#mydiv").append('<br>GeoJSON data:<br>' + JSON.stringify(response));
+			
+		}
+	});
+};
+
+	
+//Once the document is ready, we'll call the debugAjax function	
+$(document).ready(debugAjax);
 
